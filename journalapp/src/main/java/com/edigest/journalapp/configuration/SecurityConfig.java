@@ -33,7 +33,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())  // Disable CSRF protection (optional)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/journal/**","/user/**").authenticated()  // Protect specific endpoints
+                        .requestMatchers("/journal/**","/user/**").authenticated()
+                        .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().permitAll()  // Allow all other endpoints
                 )
                 .httpBasic(Customizer.withDefaults());  // Enable HTTP Basic Authentication

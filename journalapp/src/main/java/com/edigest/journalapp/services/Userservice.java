@@ -1,13 +1,9 @@
 package com.edigest.journalapp.services;
 
-import com.edigest.journalapp.entity.JournalEntry;
 import com.edigest.journalapp.entity.User;
 import com.edigest.journalapp.repositeries.Userrepo;
-import com.edigest.journalapp.repositeries.journalentryrepo;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -24,7 +20,7 @@ public class Userservice {
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
-    public void saveEntry(User user) {
+    public void SaveNewUser(User user) {
         try{
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setRoles(Arrays.asList("USER"));
@@ -35,8 +31,12 @@ public class Userservice {
 
     }
 
-    public void savenewuser(User user){
-
+    public void saveuser(User user){
+        try{
+            UserRepositery.save(user);
+        }catch(Exception e){
+            System.out.println(e);
+        }
     }
 
 
@@ -54,5 +54,15 @@ public class Userservice {
 
     public User findByUserName(String username){
         return UserRepositery.findByUserName(username);
+    }
+
+    public void saveAdmin(User user) {
+        try{
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setRoles(Arrays.asList("USER","ADMIN"));
+            UserRepositery.save(user);
+        }catch(Exception e){
+            System.out.println(e);
+        }
     }
 }
